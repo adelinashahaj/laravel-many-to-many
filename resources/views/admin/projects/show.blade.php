@@ -8,6 +8,9 @@
 <!-- vifico se dentro project di type c'e'  il valore e prendi il valore di type altrimenti null -->
 <h5> Tipo: {{$project->type?$project->type->name: 'Nessun type' }}</h5>
 
+@foreach ($project->technologies as $technology)
+<span class="badge rounded-pill text-bg-primary">{{$technology->name}}</span>
+@endforeach
 <h2>{{$project->description}}</h2>
 
 

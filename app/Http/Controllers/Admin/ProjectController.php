@@ -5,6 +5,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Support\Str; // <- da importare
 use Illuminate\Http\Request;
@@ -30,7 +31,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -55,6 +57,10 @@ class ProjectController extends Controller
        $newProject = Project::create($form_data);
        // $newProject->fill($form_data);
         //$newProject->save();
+
+        if ($request->has('technologies')) {
+            $newProject->technologies()->attach($request->technologies);
+        }
 
         return redirect()->route('admin.projects.show', ['project' => $newProject->slug])->with('status', 'Project creato con successo!');
     }
@@ -81,7 +87,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -100,6 +107,10 @@ class ProjectController extends Controller
         if ($checkPost) {
             return back()->withInput()->withErrors(['slug' => 'Impossibile creare lo slug per questo post, cambia il titolo']);
         }
+
+//prende l'id di project e lo unisce con l'id di technologies
+        $project->technologies()->sync($request->technologies);
+
         $project->update($form_data);
         //return redirect()->route('pastas.show', ['pasta' => $pasta->id]);
         return to_route('admin.projects.show', ['project' => $project->slug])->with('status', 'Formato di prggetto aggiornato!');
