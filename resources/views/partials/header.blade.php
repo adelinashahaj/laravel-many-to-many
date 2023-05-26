@@ -20,11 +20,12 @@
 
                         </li>
                         <li>
-                            <a class="nav-link" href="{{route('admin.projects.create')}}">{{ __('Crea nuovo progetto') }}</a>
+                            <a class="nav-link" href="{{route('admin.projects.create')}}">{{ __('New project') }}</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{route('admin.types.index')}}">{{ __('Types') }}</a>
+                            <a class="nav-link" href="{{route('admin.technologies.create')}}">{{ __('New technology') }}</a>
                         </li>
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->

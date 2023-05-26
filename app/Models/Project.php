@@ -27,6 +27,7 @@ class Project extends Model
     public function type() {
         return $this->belongsTo(Type::class);
     }
+    //unisce la tabella project
     public function technologies() {
         return $this->belongsToMany(Technology::class);
     }

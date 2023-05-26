@@ -51,13 +51,14 @@ class ProjectController extends Controller
 
        $checkPost = Project::where('slug', $form_data['slug'])->first();
         if ($checkPost) {
-            return back()->withInput()->withErrors(['slug' => 'Impossibile creare lo slug per questo post, cambia il titolo']);
+            return back()->withInput()->withErrors(['slug' => 'Impossibile creare lo slug per questo progetto, cambia il titolo']);
         }
 
        $newProject = Project::create($form_data);
        // $newProject->fill($form_data);
         //$newProject->save();
 
+//prende l'id di project e lo unisce con l'id di technologies e fa una verifica
         if ($request->has('technologies')) {
             $newProject->technologies()->attach($request->technologies);
         }

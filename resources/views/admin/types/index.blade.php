@@ -31,7 +31,7 @@
 
                     <a class="btn btn-primary me-2" href="{{route('admin.types.show', ['type' => $type->slug])}}">Vedi</a>
                     <a class="btn btn-warning me-2" href="">Modifica</a>
-
+                   
 
                 </td>
             </tr>

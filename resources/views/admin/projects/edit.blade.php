@@ -57,7 +57,7 @@
     <div class="mb-3">
         @foreach($technologies as $technology)
 
-            @if ($errors->any())
+            @if ($errors->any()) 
                 <input id="technology_{{$technology->id}}" @if (in_array($technology->id , old('technologies', []))) checked @endif type="checkbox" name="technologies[]" value="{{$technology->id}}">
             @else
                 <input id="technology_{{$technology->id}}" @if ($project->technologies->contains($technology->id)) checked @endif type="checkbox" name="technologies[]" value="{{$technology->id}}">

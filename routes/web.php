@@ -37,7 +37,7 @@ Route::middleware(['auth', 'verified'])
             'types' => 'type:slug'
         ]);
 
-        Route::resource('technologies', TypeController::class)->parameters([
+        Route::resource('technologies', TechnologyController::class)->parameters([
             'technologies' => 'technology:slug'
         ]);
 
