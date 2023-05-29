@@ -41,6 +41,8 @@ Route::middleware(['auth', 'verified'])
             'technologies' => 'technology:slug'
         ]);
 
+        Route::get('posts/{slug}/deleteImage', [PostController::class, 'deleteImage'])->name('posts.deleteImage');
+
 
     });
 

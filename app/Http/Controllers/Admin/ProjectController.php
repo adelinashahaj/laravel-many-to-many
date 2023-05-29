@@ -9,6 +9,7 @@ use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Support\Str; // <- da importare
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -43,8 +44,7 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $newProject = new Project();
-
+       // $newProject = new Project();
 
        $form_data = $request->validated();
        $form_data['slug'] = Project::generateSlug($request->title);
@@ -52,6 +52,12 @@ class ProjectController extends Controller
        $checkPost = Project::where('slug', $form_data['slug'])->first();
         if ($checkPost) {
             return back()->withInput()->withErrors(['slug' => 'Impossibile creare lo slug per questo progetto, cambia il titolo']);
+        }
+
+
+        if($request->hasFile('cover_image')) {
+            $path= Storage::put('cover', $request->cover_image);
+            $form_data['cover_image']=$path;
         }
 
        $newProject = Project::create($form_data);
@@ -106,8 +112,20 @@ class ProjectController extends Controller
 
         $checkPost = Project::where('slug', $form_data['slug'])->where('id', '<>', $project->id)->first();
         if ($checkPost) {
-            return back()->withInput()->withErrors(['slug' => 'Impossibile creare lo slug per questo post, cambia il titolo']);
+            return back()->withInput()->withErrors(['slug' => 'Impossibile creare lo slug per questo project, cambia il titolo']);
         }
+
+//verifica se nell request c'e l'immagine se si cancella altrimmenti aggungi
+        if($request->hasFile('cover_image')) {
+               //cancella
+            if ($project->cover_image) {
+                Storage::delete($project->cover_image);
+            }
+                // aggungi
+            $path= Storage::put('cover', $request->cover_image);
+            $form_data['cover_image'] = $path;
+        }
+
 
 //prende l'id di project e lo unisce con l'id di technologies
         $project->technologies()->sync($request->technologies);
@@ -125,6 +143,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if ($project->cover_image){
+            Storage::delete($project->cover_image);
+        }
+        
         $project->delete();
         return redirect()->route('admin.projects.index');
     }

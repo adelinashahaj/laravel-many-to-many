@@ -3,7 +3,7 @@
 @section('page-title')
 
 @section('content')
-<form method="POST" action="{{route('admin.projects.update', ['project'=>$project->slug])}}">
+<form method="POST" action="{{route('admin.projects.update', ['project'=>$project->slug])}}"enctype="multipart/form-data">
 
     @csrf
 
@@ -30,8 +30,11 @@
     </div>
 
     <div class="mb-3">
-        <label for="cover_image" class="form-label">Url dell'immagine:</label>
-        <input type="text" class="form-control @error('cover_image') is-invalid @enderror" id="cover_image" name="cover_image" value="{{ old('cover_image',$project->cover_image)}}" >
+        <!--<label for="cover_image" class="form-label">Url dell'immagine:</label>
+        <input type="text" class="form-control @error('cover_image') is-invalid @enderror" id="cover_image" name="cover_image" value="{{ old('cover_image',$project->cover_image)}}" >-->
+
+        <label for="cover_image" class="form-label">Seleziona immagine:</label>
+        <input type="file" class="form-control @error('cover_image') is-invalid @enderror" id="cover_image" name="cover_image">
         @error('cover_image')
         <div class="invalid-feedback">
             {{ $message }}
@@ -57,9 +60,9 @@
     <div class="mb-3">
         @foreach($technologies as $technology)
 
-            @if ($errors->any()) 
+            @if ($errors->any()) <!--si fa una verifica se nell arrey di technology id ci sono dei valori prendi il valore precedente senno dammi un array vuoto-->
                 <input id="technology_{{$technology->id}}" @if (in_array($technology->id , old('technologies', []))) checked @endif type="checkbox" name="technologies[]" value="{{$technology->id}}">
-            @else
+            @else<!--inivece qui fa la verifica se -->
                 <input id="technology_{{$technology->id}}" @if ($project->technologies->contains($technology->id)) checked @endif type="checkbox" name="technologies[]" value="{{$technology->id}}">
             @endif
 
